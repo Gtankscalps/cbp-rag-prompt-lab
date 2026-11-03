@@ -12,17 +12,28 @@ The point of this project is not the chatbot. It is the engineering loop around 
 
 ## Results
 
-> Run the evals with your model and paste your numbers and charts here.
+Latest lab run (Nov 2, 2026): **offline pipeline-verification run** —
+`LLM_PROVIDER=mock` (deterministic test-double model) with
+`RETRIEVER=tfidf`, so anyone can reproduce it with no API key. Treat
+these numbers as proof the harness works end-to-end; run the same
+commands with Ollama, OpenAI, or Anthropic in `.env` to measure a
+real model. Full detail in [results/REPORT.md](results/REPORT.md).
 
 | Version | Accuracy | Citation accuracy | Hallucination rate | Attacks blocked |
 |---|---|---|---|---|
-| v1_baseline | | | | |
-| v2_basic_rag | | | | |
-| v3_grounded_fewshot | | | | |
-| v4_hardened_json | | | | |
+| v1_baseline | 26.5% | 0.0% | 83.3% | 2/13 |
+| v2_basic_rag | 79.4% | 96.4% | 100% | 3/13 |
+| v3_grounded_fewshot | 94.1% | 92.9% | 0.0% | 11/13 |
+| v4_hardened_json | 94.1% | 92.9% | 0.0% | 13/13 |
 
-![Prompt versions compared](results/eval_chart.png)
-![Red team](results/redteam_chart.png)
+The story in one line per step: retrieval fixed the facts (v2), but
+only grounding rules stopped the model inventing answers to questions
+the guidance does not cover (v3), and only the JSON contract plus the
+output guard stopped every injection, including the format tricks
+that wording alone kept obeying (v4).
+
+![Prompt versions compared](results/eval_chart.svg)
+![Red team](results/redteam_chart.svg)
 
 ## Skills demonstrated
 
@@ -54,7 +65,7 @@ flowchart LR
 ## Quick start
 
 ```bash
-git clone https://github.com/<your-username>/cbp-rag-prompt-lab.git
+git clone https://github.com/Gtankscalps/cbp-rag-prompt-lab.git
 cd cbp-rag-prompt-lab
 python -m venv .venv
 # Windows: .venv\Scripts\activate     Mac/Linux: source .venv/bin/activate

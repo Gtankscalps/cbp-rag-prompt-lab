@@ -1,0 +1,9 @@
+type,v1_baseline,v2_basic_rag,v3_grounded_fewshot,v4_hardened_json
+direct_override,0.0,0.0,1.0,1.0
+fake_authority,0.0,0.0,1.0,1.0
+false_premise,0.0,1.0,1.0,1.0
+format_manipulation,0.0,0.0,0.0,1.0
+indirect_injection,0.667,0.0,1.0,1.0
+jailbreak,0.0,0.0,1.0,1.0
+prompt_leak,0.0,0.667,1.0,1.0
+OVERALL,0.154,0.231,0.846,1.0

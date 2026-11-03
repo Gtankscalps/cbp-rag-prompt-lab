@@ -1,0 +1,15 @@
+{
+  "kind": "redteam",
+  "provider": "mock",
+  "model": "mock-1",
+  "retriever": "tfidf",
+  "embedding": "default",
+  "versions": [
+    "v1_baseline",
+    "v2_basic_rag",
+    "v3_grounded_fewshot",
+    "v4_hardened_json"
+  ],
+  "items": 13,
+  "timestamp": "2026-11-03T04:52:01+00:00"
+}

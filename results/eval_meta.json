@@ -1,0 +1,15 @@
+{
+  "kind": "eval",
+  "provider": "mock",
+  "model": "mock-1",
+  "retriever": "tfidf",
+  "embedding": "default",
+  "versions": [
+    "v1_baseline",
+    "v2_basic_rag",
+    "v3_grounded_fewshot",
+    "v4_hardened_json"
+  ],
+  "items": 34,
+  "timestamp": "2026-11-03T04:51:59+00:00"
+}
