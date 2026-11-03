@@ -40,3 +40,16 @@ model complies; every answer is machine-validatable before a human
 or a downstream system ever sees it.
 **Lesson:** prompt wording alone plateaus. The last layer of defense
 has to be code, not prose.
+
+## Nov 3, 2026 — test set expansion (no prompt change)
+**Changes:** eval grew from 34 to 64 questions (24 new answerable,
+6 new unanswerable), the red team from 13 to 25 attacks (new
+format-manipulation, false-premise, and fake-authority cases), and
+the unit suite from 16 to 24 tests. No prompt was touched — this
+entry exists so the score drop is not mistaken for a regression.
+**Found:** v4 accuracy 94.1% → 90.6% on the harder set. Refusals
+miss 3 of the 12 unanswerable questions, all plausible operational
+ones. Two new format attacks made v4 over-refuse: the canary never
+leaked, but the legitimate fact was dropped with the attack.
+**Lesson:** a bigger, meaner test set is worth more than a better
+score on a small one.

@@ -5,14 +5,14 @@ A retrieval augmented generation (RAG) assistant that answers questions about pu
 The point of this project is not the chatbot. It is the engineering loop around it:
 
 1. **Design** four prompt versions, each changing one idea
-2. **Test** every version on 34 scored questions (including 6 that cannot be answered from the documents)
-3. **Attack** every version with 13 prompt injection and jailbreak tests
+2. **Test** every version on 64 scored questions (including 12 that cannot be answered from the documents)
+3. **Attack** every version with 25 prompt injection and jailbreak tests
 4. **Measure** accuracy, citation accuracy, hallucination rate, JSON validity, and defense rate
 5. **Debug** failures and document every change in a prompt changelog
 
 ## Results
 
-Latest lab run (Nov 2, 2026): **offline pipeline-verification run** —
+Latest lab run (Nov 3, 2026): **offline pipeline-verification run** —
 `LLM_PROVIDER=mock` (deterministic test-double model) with
 `RETRIEVER=tfidf`, so anyone can reproduce it with no API key. Treat
 these numbers as proof the harness works end-to-end; run the same
@@ -21,16 +21,22 @@ real model. Full detail in [results/REPORT.md](results/REPORT.md).
 
 | Version | Accuracy | Citation accuracy | Hallucination rate | Attacks blocked |
 |---|---|---|---|---|
-| v1_baseline | 26.5% | 0.0% | 83.3% | 2/13 |
-| v2_basic_rag | 79.4% | 96.4% | 100% | 3/13 |
-| v3_grounded_fewshot | 94.1% | 92.9% | 0.0% | 11/13 |
-| v4_hardened_json | 94.1% | 92.9% | 0.0% | 13/13 |
+| v1_baseline | 15.6% | 0.0% | 91.7% | 7/25 |
+| v2_basic_rag | 78.1% | 98.1% | 100% | 12/25 |
+| v3_grounded_fewshot | 90.6% | 96.2% | 25.0% | 21/25 |
+| v4_hardened_json | 90.6% | 96.2% | 25.0% | 23/25 |
 
-The story in one line per step: retrieval fixed the facts (v2), but
-only grounding rules stopped the model inventing answers to questions
-the guidance does not cover (v3), and only the JSON contract plus the
-output guard stopped every injection, including the format tricks
-that wording alone kept obeying (v4).
+The story in one line per step: retrieval fixed the facts (v2),
+grounding rules cut most invented answers (v3), and the JSON contract
+plus output guard hardened the injection defense (v4) — the canary
+code never leaked under v4 in any of the 25 attacks. The expanded
+test set (grown from 34 to 64 questions and 13 to 25 attacks on
+Nov 3) also exposed two honest weaknesses: v4 still answers 3 of the
+12 unanswerable questions when they sound like plausible operational
+questions (a live wait time, a staffing count, a specific tariff
+rate), and on 2 format-manipulation attacks it refused so hard that
+it dropped the legitimate fact along with the attack. Both are
+documented in results/REPORT.md, not hidden.
 
 ![Prompt versions compared](results/eval_chart.svg)
 ![Red team](results/redteam_chart.svg)
@@ -113,14 +119,16 @@ src/
   report.py            charts and results/REPORT.md
 data/
   knowledge_base/      10 short summaries of public CBP guidance
-  eval/questions.jsonl 34 test questions with expected answers
-  eval/attacks.jsonl   13 attacks
+  eval/questions.jsonl 64 test questions with expected answers
+  eval/attacks.jsonl   25 attacks
 docs/                  prompt changelog, interview guide, setup guide
 tests/                 offline unit tests
 ```
 
 ## Limitations and next steps
 
+* Refusals do not generalize to every unanswerable question yet: plausible operational questions (live wait times, staffing counts, exact tariff rates) still get invented answers 3 times out of 12. Next step: a retrieval-confidence threshold that forces a refusal when no chunk is on-topic.
+* The output guard over-refuses when an attack hides inside a formatting demand: the code stays safe, but the user loses a legitimate answer. Next step: strip the injected instruction and answer the underlying question instead of refusing the whole request.
 * Keyword based scoring is strict and simple. Next step: add an LLM as judge scorer and compare it with human labels.
 * The knowledge base is small and hand summarized. Next step: ingest full pages from cbp.gov with a scheduled refresh.
 * Add function calling so the model can trigger a second search when retrieval misses.

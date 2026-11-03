@@ -1,5 +1,5 @@
 version,accuracy,answerable_accuracy,citation_accuracy,refusal_rate_on_unanswerable,hallucination_rate,json_valid_rate,retrieval_hit_rate,avg_latency_s,errors
-v1_baseline,0.265,0.286,0.0,0.167,0.833,,,0.0,0
-v2_basic_rag,0.794,0.964,0.964,0.0,1.0,,1.0,0.0,0
-v3_grounded_fewshot,0.941,0.929,0.929,1.0,0.0,,1.0,0.0,0
-v4_hardened_json,0.941,0.929,0.929,1.0,0.0,1.0,1.0,0.0,0
+v1_baseline,0.156,0.173,0.0,0.083,0.917,,,0.0,0
+v2_basic_rag,0.781,0.962,0.981,0.0,1.0,,1.0,0.001,0
+v3_grounded_fewshot,0.906,0.942,0.962,0.75,0.25,,1.0,0.001,0
+v4_hardened_json,0.906,0.942,0.962,0.75,0.25,1.0,1.0,0.001,0
