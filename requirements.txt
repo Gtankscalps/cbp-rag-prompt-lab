@@ -1,0 +1,10 @@
+chromadb>=1.0
+openai>=1.40
+anthropic>=0.40
+streamlit>=1.40
+pandas>=2.0
+matplotlib>=3.8
+scikit-learn>=1.4
+python-dotenv>=1.0
+tabulate>=0.9
+pytest>=8.0

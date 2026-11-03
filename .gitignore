@@ -1,0 +1,18 @@
+# secrets
+.env
+
+# python
+__pycache__/
+*.pyc
+.venv/
+venv/
+.pytest_cache/
+
+# local vector database (rebuilt automatically)
+.chroma_db/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
